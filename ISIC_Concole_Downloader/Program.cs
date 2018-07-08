@@ -23,6 +23,7 @@ namespace ISIC_Concole_Downloader
             // ------------  GET USER INPUTS TRHOUGH CONSOLE MENU --------------------
             // Login user
             bool loggedIn = false;
+            
             while (!loggedIn)
             {
                 GetLoginDetails();
@@ -58,7 +59,7 @@ namespace ISIC_Concole_Downloader
             int counter = 0;
             foreach (Imagemetadata image in lImageMetadata)
             {
-                APIHelper.DownloadImage(image._id, image.name);
+                APIHelper.DownloadImage(image._id, image.name, imagesPath);
                 counter++;
                 if (counter % 50 == 0)
                 {
@@ -78,9 +79,9 @@ namespace ISIC_Concole_Downloader
 
         public static void CreateCSV(List<Imagemetadata> lImageMetadata)
         {
-            using (var w = new StreamWriter($"e:/DATA/ImageMetadata.csv"))
+            using (var w = new StreamWriter(imagesPath + "\\" + "ImagesMetadata.csv"))
             {
-                string header = @"_id,_modelType,name,created,creator_id,creator_name,updated,dataset_accessLevel,dataset_id,dataset_description,dataset_license,dataset_name,dataset_updated,meta_acquisition_image_type,meta_acquisition_pixelsX,meta_acquisition_pixelsY,meta_clinical_age_approx,meta_clinical_benign_malignant,meta_clinical_diagnosis,meta_clinical_diagnosis_confirm_type,meta_clinical_melanocytic,meta_clinical_sex,notes_reviewed_accepted,notes_reviewed_time,notes_reviewed_userId, notes_tags";
+                string header = @"_id,_modelType,name,created,creator_id,creator_name,updated,dataset_accessLevel,dataset_id,dataset_license,dataset_name,dataset_updated,meta_acquisition_image_type,meta_acquisition_pixelsX,meta_acquisition_pixelsY,meta_clinical_age_approx,meta_clinical_benign_malignant,meta_clinical_diagnosis,meta_clinical_diagnosis_confirm_type,meta_clinical_melanocytic,meta_clinical_sex,notes_reviewed_accepted,notes_reviewed_time,notes_reviewed_userId, notes_tags";
                 w.WriteLine(header);
                 w.Flush();
                 foreach (Imagemetadata img in lImageMetadata)
@@ -111,12 +112,8 @@ namespace ISIC_Concole_Downloader
                         img.meta.clinical.diagnosis = img.meta.clinical.diagnosis.Replace(",", "");
                     }
 
-                    if (!string.IsNullOrEmpty(img.dataset.description))
-                    {
-                        img.dataset.description = img.dataset.description.Replace(",", "");
-                    }
                     
-                    var line = $"{img._id.ToString()},{img._modelType},{img.name},{img.created},{img.creator._id},{img.creator.name},{img.updated},{img.dataset._accessLevel},{img.dataset._id},{img.dataset.description.Replace(",","")},{img.dataset.license},{img.dataset.name},{img.dataset.updated},{img.meta.acquisition.image_type},{img.meta.acquisition.pixelsX},{img.meta.acquisition.pixelsY},{img.meta.clinical.age_approx},{img.meta.clinical.benign_malignant.Replace(",", "")},{img.meta.clinical.diagnosis.Replace(",", "")},{img.meta.clinical.diagnosis_confirm_type},{img.meta.clinical.melanocytic},{img.meta.clinical.sex},{img.notes.reviewed.accepted},{img.notes.reviewed.time},{img.notes.reviewed.userId},{tags.Replace(",", "")}";
+                    var line = $"{img._id.ToString()},{img._modelType},{img.name},{img.created},{img.creator._id},{img.creator.name},{img.updated},{img.dataset._accessLevel},{img.dataset._id},{img.dataset.license},{img.dataset.name},{img.dataset.updated},{img.meta.acquisition.image_type},{img.meta.acquisition.pixelsX},{img.meta.acquisition.pixelsY},{img.meta.clinical.age_approx},{img.meta.clinical.benign_malignant.Replace(",", "")},{img.meta.clinical.diagnosis.Replace(",", "")},{img.meta.clinical.diagnosis_confirm_type},{img.meta.clinical.melanocytic},{img.meta.clinical.sex},{img.notes.reviewed.accepted},{img.notes.reviewed.time},{img.notes.reviewed.userId},{tags.Replace(",", "")}";
 
                     line = line.Replace("\n", "");
                     w.WriteLine(line);

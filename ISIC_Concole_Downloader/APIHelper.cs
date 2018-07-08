@@ -164,7 +164,7 @@ namespace ISIC_Concole_Downloader
         /// </summary>
         /// <param name="ISIC id of an image"></param>
         /// <param name="ISIC name of an image"></param>
-        public static void DownloadImage (string id, string name)
+        public static void DownloadImage (string id, string name, string path)
         {
             // Building http request, using the cookie for authentication
             var request = (HttpWebRequest)WebRequest.Create(API + $"image/{id}/download");
@@ -176,7 +176,7 @@ namespace ISIC_Concole_Downloader
             {
                 using (var response = (HttpWebResponse)request.GetResponse())
                 {
-                    using (Stream output = File.OpenWrite("e:/DATA/" + name + ".jpg"))
+                    using (Stream output = File.OpenWrite(path + "/" + name + ".jpg"))
                     using (Stream input = response.GetResponseStream())
                     {
                         input.CopyTo(output);
