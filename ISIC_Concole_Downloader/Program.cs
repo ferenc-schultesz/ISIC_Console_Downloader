@@ -51,7 +51,7 @@ namespace ISIC_Concole_Downloader
                 Logger.LogErr("Failed to save metadata: " + ex.Message);
                 Logger.LogMsg("");
             }
-
+            Logger.LogMsg($"Metadata downloaded for {lImageMetadata.Count.ToString()} images");
             // Filter out the already downloaded images
             lImageMetadata = filterDownloadedImages(lImageMetadata);
 
@@ -67,7 +67,8 @@ namespace ISIC_Concole_Downloader
                 }
 
             }
-            
+            Logger.LogMsg($"{lImageMetadata.Count.ToString()} images downloaded");
+
             Console.WriteLine("------------------------------------------------");
             Console.WriteLine();
             Console.WriteLine("Download finished");
